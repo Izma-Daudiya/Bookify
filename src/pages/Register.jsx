@@ -1,53 +1,67 @@
-import React, { useState } from "react";
-import { Button } from "react-bootstrap";
-import { Form } from "react-bootstrap";
-import { useFirebase } from "../context/Firebase";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-export const RegisterPage = () => {
-    const firebase = useFirebase()
-    const {signupUserWithEmailAndPassword, isLoggedIn} = useFirebase()
-    
-    const navigate = useNavigate()
+import Button from "react-bootstrap/Button";
+import Form from "react-bootstrap/Form";
 
-    const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
-    
-    useEffect(() => {
-        if(isLoggedIn){
-            navigate("/")
-        }
-    },[firebase, navigate])
+import { useFirebase } from "../context/Firebase";
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        console.log("Sign Up")
-        const result = await signupUserWithEmailAndPassword(email, password)
-        console.log("Success", result)
+const RegisterPage = () => {
+  const firebase = useFirebase();
+  const navigate = useNavigate();
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  useEffect(() => {
+    if (firebase.isLoggedIn) {
+      // navigate to home
+      navigate("/");
     }
-    
-    return (
-        <>
-            <div className="container mt-5">
-                <Form>
-                    <Form.Group className="mb-3" controlId="formBasicEmail">
-                        <Form.Label>Email address</Form.Label>
-                        <Form.Control type="email" placeholder="Enter email" value={email} onChange={e => setEmail(e.target.value)} />
-                        <Form.Text className="text-muted">
-                        We'll never share your email with anyone else.
-                        </Form.Text>
-                    </Form.Group>
+  }, [firebase, navigate]);
 
-                    <Form.Group className="mb-3" controlId="formBasicPassword">
-                        <Form.Label>Password</Form.Label>
-                        <Form.Control type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)}/>
-                    </Form.Group>
-                    
-                    <Button variant="primary" type="submit" onClick={handleSubmit}>
-                        Create Account
-                    </Button>
-                </Form>
-            </div>
-        </>
-    )
-}
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    console.log("Signin up a user...");
+    const result = await firebase.signupUserWithEmailAndPassword(
+      email,
+      password
+    );
+    console.log("Successfull", result);
+  };
+
+  return (
+    <div className="container mt-5">
+      <Form onSubmit={handleSubmit}>
+        <Form.Group className="mb-3" controlId="formBasicEmail">
+          <Form.Label>Email address</Form.Label>
+          <Form.Control
+            onChange={(e) => setEmail(e.target.value)}
+            value={email}
+            type="email"
+            placeholder="Enter email"
+          />
+          <Form.Text className="text-muted">
+            We'll never share your email with anyone else.
+          </Form.Text>
+        </Form.Group>
+
+        <Form.Group className="mb-3" controlId="formBasicPassword">
+          <Form.Label>Password</Form.Label>
+          <Form.Control
+            onChange={(e) => setPassword(e.target.value)}
+            value={password}
+            type="password"
+            placeholder="Password"
+          />
+        </Form.Group>
+
+        <Button variant="primary" type="submit">
+          Create Account
+        </Button>
+      </Form>
+    </div>
+  );
+};
+
+export default RegisterPage;

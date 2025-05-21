@@ -1,24 +1,21 @@
 import React from "react";
-import Container from 'react-bootstrap/Container';
-import Nav from 'react-bootstrap/Nav';
-import Navbar from 'react-bootstrap/Navbar';
-import { NavLink } from "react-router-dom";
+import Container from "react-bootstrap/Container";
+import Nav from "react-bootstrap/Nav";
+import Navbar from "react-bootstrap/Navbar";
 
-export const MyNavbar = () => {
-    return (
-        <>
-         <Navbar expand="lg" className="bg-body-tertiary">
+const MyNavbar = () => {
+  return (
+    <Navbar bg="dark" variant="dark">
       <Container>
-        <Navbar.Brand href="#home">Bookify</Navbar.Brand>
-        <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="me-auto">
-            <Nav.Link href="/">Home</Nav.Link>
-            <Nav.Link href="/book/list">Add Listing</Nav.Link>
-          </Nav>
-        </Navbar.Collapse>
+        <Navbar.Brand href="/">Bookify</Navbar.Brand>
+        <Nav className="me-auto">
+          <Nav.Link href="/">Home</Nav.Link>
+          <Nav.Link href="/book/list">Add Listing</Nav.Link>
+          <Nav.Link href="/book/orders">Orders</Nav.Link>
+        </Nav>
       </Container>
     </Navbar>
-        </>
-    )
-}
+  );
+};
+
+export default MyNavbar;

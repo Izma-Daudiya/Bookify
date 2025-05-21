@@ -1,52 +1,64 @@
-import React, { useEffect, useState } from "react";
-import { Button } from "react-bootstrap";
-import { Form } from "react-bootstrap";
-import { useFirebase } from "../context/Firebase";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import Button from "react-bootstrap/Button";
+import Form from "react-bootstrap/Form";
 
-export const LoginPage = () => {
-    const firebase = useFirebase()
-    const {signinUserWithEmailAndPassword, signinWithGoogle, isLoggedIn} = useFirebase()
-    const navigate = useNavigate()
+import { useFirebase } from "../context/Firebase";
 
-    const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
-    
-    useEffect(() => {
-        if(isLoggedIn){
-            navigate("/")
-        }
-    },[firebase, navigate])
+const LoginPage = () => {
+  const firebase = useFirebase();
+  const navigate = useNavigate();
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        console.log("Sign In")
-        const result = await signinUserWithEmailAndPassword(email, password)
-        console.log("Success", result)
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  useEffect(() => {
+    if (firebase.isLoggedIn) {
+      // navigate to home
+      navigate("/");
     }
-    
-    return (
-        <>
-            <div className="container mt-5">
-                <Form>
-                    <Form.Group className="mb-3" controlId="formBasicEmail">
-                        <Form.Label>Email address</Form.Label>
-                        <Form.Control type="email" placeholder="Enter email" value={email} onChange={e => setEmail(e.target.value)} />
-                        
-                    </Form.Group>
+  }, [firebase, navigate]);
 
-                    <Form.Group className="mb-3" controlId="formBasicPassword">
-                        <Form.Label>Password</Form.Label>
-                        <Form.Control type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)}/>
-                    </Form.Group>
-                    
-                    <Button variant="primary" type="submit" onClick={handleSubmit}>
-                        Login
-                    </Button>
-                </Form>
-                <h1 className="mt-5 mb-5">OR</h1>
-                <Button variant="danger" onClick={signinWithGoogle}>Sign In with Google</Button>
-            </div>
-        </>
-    )
-}
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    console.log("login in a user...");
+    const result = await firebase.singinUserWithEmailAndPass(email, password);
+    console.log("Successfull", result);
+  };
+
+  return (
+    <div className="container mt-5">
+      <Form onSubmit={handleSubmit}>
+        <Form.Group className="mb-3" controlId="formBasicEmail">
+          <Form.Label>Email address</Form.Label>
+          <Form.Control
+            onChange={(e) => setEmail(e.target.value)}
+            value={email}
+            type="email"
+            placeholder="Enter email"
+          />
+        </Form.Group>
+
+        <Form.Group className="mb-3" controlId="formBasicPassword">
+          <Form.Label>Password</Form.Label>
+          <Form.Control
+            onChange={(e) => setPassword(e.target.value)}
+            value={password}
+            type="password"
+            placeholder="Password"
+          />
+        </Form.Group>
+
+        <Button variant="primary" type="submit">
+          Login
+        </Button>
+      </Form>
+      <h1 className="mt-5 mb-5">OR</h1>
+      <Button onClick={firebase.signinWithGoogle} variant="danger">
+        Signin with Google
+      </Button>
+    </div>
+  );
+};
+
+export default LoginPage;
