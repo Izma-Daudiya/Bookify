@@ -1,7 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { createContext, useContext, useEffect, useState } from "react";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from "firebase/auth";
-
+import {getFirestore} from 'firebase/firestore';
 
 const firebaseConfig = {
   apiKey: "AIzaSyCGzi8HQfhmjaoAbrMyoogxzFYmk3jZ0RU",
@@ -17,6 +17,7 @@ const firebaseApp = initializeApp(firebaseConfig);
 
 const firebaseAuth = getAuth(firebaseApp)
 const googleProvider = new GoogleAuthProvider() 
+const firestore = getFirestore(firebaseApp)
 
 const FirebaseContext = createContext(null)
 
@@ -43,10 +44,12 @@ export const FirebaseProvider = ({children}) => {
     const signinWithGoogle = () => {
         signInWithPopup(firebaseAuth, googleProvider)
     }
-
     const isLoggedIn = user ? true : false;
+    const handleCreateNewListing = (name, isbn, price, cover) => {
 
-    return <FirebaseContext.Provider value={{signupUserWithEmailAndPassword, signinUserWithEmailAndPassword, signinWithGoogle, isLoggedIn}}>
+    } 
+
+    return <FirebaseContext.Provider value={{signupUserWithEmailAndPassword, signinUserWithEmailAndPassword, signinWithGoogle, isLoggedIn, handleCreateNewListing}}>
         {children}
     </FirebaseContext.Provider>
 }
